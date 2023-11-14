@@ -1,0 +1,68 @@
+#!/bin/bash
+
+# Stop on the first sign of trouble
+set -e
+
+echo "Starting setup on Arch Linux..."
+
+# Update your package manager & Upgrade any existing packages
+sudo pacman -Syu --noconfirm
+
+# Install Go
+sudo pacman -S --noconfirm go || {
+  echo "Failed to install Go."
+  exit 1
+}
+
+# Install Flutter using yay
+yay -S --noconfirm flutter || {
+  echo "Failed to install Flutter."
+  exit 1
+}
+
+# Adding Flutter to PATH for bash and zsh
+FLUTTER_PATH="$HOME/.local/share/flutter/bin"
+if ! grep -q "$FLUTTER_PATH" "$HOME/.bashrc"; then
+  echo 'export PATH="$PATH:'$FLUTTER_PATH'"' >> "$HOME/.bashrc"
+fi
+if ! grep -q "$FLUTTER_PATH" "$HOME/.zshrc"; then
+  echo 'export PATH="$PATH:'$FLUTTER_PATH'"' >> "$HOME/.zshrc"
+fi
+
+# Note: Users should source their shell profile or restart the terminal after the script execution.
+
+# Run Flutter doctor
+flutter doctor -v
+
+# Install Node.js and npm for Typescript, React, and TailwindCSS
+sudo pacman -S --noconfirm nodejs npm || {
+  echo "Failed to install Node.js and npm."
+  exit 1
+}
+
+# Install TypeScript
+sudo npm install -g typescript || {
+  echo "Failed to install TypeScript."
+  exit 1
+}
+
+# Install create-react-app for React
+sudo npm install -g create-react-app || {
+  echo "Failed to install create-react-app."
+  exit 1
+}
+
+# Install Tailwind CSS
+sudo npm install -g tailwindcss || {
+  echo "Failed to install Tailwind CSS."
+  exit 1
+}
+
+# Install HTMX - Assuming you want to use it with npm for front-end development
+sudo npm install -g htmx || {
+  echo "Failed to install HTMX."
+  exit 1
+}
+
+echo "All done. Please restart your terminal or source your shell profile to make sure all changes take effect."
+
