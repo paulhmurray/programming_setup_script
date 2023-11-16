@@ -8,31 +8,29 @@ echo "Starting setup on Arch Linux..."
 # Update your package manager & Upgrade any existing packages
 sudo pacman -Syu --noconfirm
 
+# Install Clang
+sudo pacman -S --noconfirm clang || {
+  echo "Failed to install C."
+  exit 1
+}
 # Install Go
 sudo pacman -S --noconfirm go || {
   echo "Failed to install Go."
   exit 1
 }
 
-# Install Flutter using yay
-yay -S --noconfirm flutter || {
-  echo "Failed to install Flutter."
-  exit 1
-}
+# Install snapd
+git clone https://aur.archlinux.org/snapd.git
+cd snapd
+makepkg -si
+cd ..
+sudo systemctl enable --now snapd.socket
+sudo ln -s /var/lib/snapd/snap /snap || true
 
-# Adding Flutter to PATH for bash and zsh
-FLUTTER_PATH="$HOME/.local/share/flutter/bin"
-if ! grep -q "$FLUTTER_PATH" "$HOME/.bashrc"; then
-  echo 'export PATH="$PATH:'$FLUTTER_PATH'"' >> "$HOME/.bashrc"
-fi
-if ! grep -q "$FLUTTER_PATH" "$HOME/.zshrc"; then
-  echo 'export PATH="$PATH:'$FLUTTER_PATH'"' >> "$HOME/.zshrc"
-fi
+# # Install Flutter using snap
+sudo snap install flutter --classic
 
-# Note: Users should source their shell profile or restart the terminal after the script execution.
-
-# Run Flutter doctor
-flutter doctor -v
+flutter doctor --android-licenses
 
 # Install Node.js and npm for Typescript, React, and TailwindCSS
 sudo pacman -S --noconfirm nodejs npm || {
@@ -58,11 +56,16 @@ sudo npm install -g tailwindcss || {
   exit 1
 }
 
-# Install HTMX - Assuming you want to use it with npm for front-end development
+# Install HTMX
 sudo npm install -g htmx || {
   echo "Failed to install HTMX."
   exit 1
 }
 
-echo "All done. Please restart your terminal or source your shell profile to make sure all changes take effect."
+# Install Android Studio 
+yay -S --noconfirm android-studio || {
+  echo "Failed to install Android Studio."
+  exit 1
+}
 
+echo "All done. Please restart your terminal or source your shell profile to make sure all changes take effect."
