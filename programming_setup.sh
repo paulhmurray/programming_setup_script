@@ -18,6 +18,11 @@ sudo pacman -S --noconfirm go || {
   echo "Failed to install Go."
   exit 1
 }
+# Install migrate 
+sudo yay -S --noconfirm migrate || {
+  echo "Failed to install migrate."
+  exit 1
+}
 
 # Install snapd
 git clone https://aur.archlinux.org/snapd.git
