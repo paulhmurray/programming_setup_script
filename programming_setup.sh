@@ -23,6 +23,10 @@ sudo yay -S --noconfirm migrate || {
   echo "Failed to install migrate."
   exit 1
 }
+# Install yay
+git clone https://aur.archlinux.org/yay.git
+cd yay
+makepkg -si
 
 # Install snapd
 git clone https://aur.archlinux.org/snapd.git
